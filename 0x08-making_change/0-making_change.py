@@ -4,15 +4,18 @@
 
 def makeChange(coins, total):
     """determines the fewest number of coins needed to meet a total"""
-    if total <= 0:
-        return 0
-
-    dp = [float('inf')] * (total + 1)
-
-    dp[0] = 0
+    coins.sort(reverse=True)
+    count = 0
 
     for coin in coins:
-        for amount in range(coin, total + 1):
-            dp[amount] = min(dp[amount], dp[amount - coin] + 1)
+        if total == 0:
+            break
+        # Use as many of the largest coin as possible
+        num_coins = total // coin
+        count += num_coins
+        total -= num_coins * coin
 
-    return dp[total] if dp[total] != float('inf') else -1
+    # If the total couldn't be made with the given coins
+    if total != 0:
+        return -1
+    return count
